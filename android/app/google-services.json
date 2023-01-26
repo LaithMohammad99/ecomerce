@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "6573833738",
+    "project_id": "flutte-ecomerce",
+    "storage_bucket": "flutte-ecomerce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6573833738:android:c37ff21406ff226423e9f3",
+        "android_client_info": {
+          "package_name": "com.example.ecommercapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6573833738-tekt559j3nl341rh70g02o97d5tkmmf4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ecommercapp",
+            "certificate_hash": "9ac75f92b930bd5c7f73280a0256582e6ee373ea"
+          }
+        },
+        {
+          "client_id": "6573833738-iaue0hmrlooaa00r2b0o9o9liajilk2s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJZy3hxchgN95jilAOif3ajUCiQPHrjPk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "6573833738-iaue0hmrlooaa00r2b0o9o9liajilk2s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
