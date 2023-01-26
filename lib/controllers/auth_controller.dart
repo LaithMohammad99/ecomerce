@@ -9,7 +9,8 @@ class AuthController with ChangeNotifier {
   AuthFormType authFormType;
 
   AuthController(
-      {required this.auth,
+      {
+        required this.auth,
       this.email = '',
       this.password = '',
       this.authFormType = AuthFormType.login
