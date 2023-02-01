@@ -23,8 +23,38 @@ class _AuthPageState extends State<AuthPage> {
   FocusNode _emailNodeController = FocusNode();
   FocusNode _passwordNodeController = FocusNode();
 
-  var _authType = AuthFormType.login;
   var _formKey = GlobalKey<FormState>();
+
+  Future<void> _submit(AuthController model) async {
+    try {
+      await model.submit();
+      if(!mounted)return;
+      Navigator.of(context).pushNamed(AppRoutes.bottomNavBarRoute);
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (builder) => AlertDialog(
+                content: Text(e.toString()),
+                title: Text(
+                  'error',
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text('Close'))
+                ],
+              ));
+    }
+
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +62,7 @@ class _AuthPageState extends State<AuthPage> {
     return ChangeNotifierProvider<AuthController>(
       create: (_) => AuthController(auth: authController),
       child: Consumer<AuthController>(
-        builder:(_,model,child)=> Scaffold(
+        builder: (_, model, child) => Scaffold(
           body: SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 60.0, horizontal: 32.0),
@@ -43,7 +73,7 @@ class _AuthPageState extends State<AuthPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          _authType == AuthFormType.login
+                          model.authFormType == AuthFormType.login
                               ? 'Login'
                               : 'Registeriton',
                           style: Theme.of(context).textTheme.headline3),
@@ -51,7 +81,7 @@ class _AuthPageState extends State<AuthPage> {
                         height: 90,
                       ),
                       TextFormField(
-                        onChanged:model.updateEmail,
+                        onChanged: model.updateEmail,
                         focusNode: _emailNodeController,
                         onEditingComplete: () => FocusScope.of(context)
                             .requestFocus(_passwordNodeController),
@@ -93,7 +123,7 @@ class _AuthPageState extends State<AuthPage> {
                       SizedBox(
                         height: 16.0,
                       ),
-                      if (_authType == AuthFormType.login)
+                      if (model.authFormType == AuthFormType.login)
                         Align(
                           alignment: Alignment.bottomRight,
                           child: InkWell(
@@ -106,15 +136,12 @@ class _AuthPageState extends State<AuthPage> {
                         height: 24.0,
                       ),
                       AppButton(
-                          title: _authType == AuthFormType.login
+                          title: model.authFormType == AuthFormType.login
                               ? 'Login'
                               : 'Register',
                           onTap: () {
                             if (_formKey.currentState!.validate()) {
-                              print(model.email);
-                              print(model.password);
-                              // Navigator.of(context)
-                              //     .pushNamed(AppRoutes.bottomNavBarRoute);
+                              _submit(model);
                             } else {
                               print('UnAuthuntaicted');
                             }
@@ -125,19 +152,13 @@ class _AuthPageState extends State<AuthPage> {
                       Align(
                         alignment: Alignment.bottomRight,
                         child: InkWell(
-                          child: Text(_authType == AuthFormType.login
+                          child: Text(model.authFormType == AuthFormType.login
                               ? 'Dont have an account?Register'
                               : 'Have an Account Login'),
                           onTap: () {
                             _formKey.currentState!.reset();
 
-                            setState(() {
-                              if (_authType == AuthFormType.login) {
-                                _authType = AuthFormType.register;
-                              } else {
-                                _authType = AuthFormType.login;
-                              }
-                            });
+                            model.toggleFormType();
                           },
                         ),
                       ),
@@ -148,7 +169,7 @@ class _AuthPageState extends State<AuthPage> {
                       Align(
                           alignment: Alignment.center,
                           child: Text(
-                            _authType == AuthFormType.login
+                            model.authFormType == AuthFormType.login
                                 ? 'Or login with'
                                 : 'Or register with',
                             style: Theme.of(context).textTheme.subtitle1,

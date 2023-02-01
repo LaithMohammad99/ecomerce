@@ -9,13 +9,10 @@ class AuthController with ChangeNotifier {
   AuthFormType authFormType;
 
   AuthController(
-      {
-        required this.auth,
+      {required this.auth,
       this.email = '',
       this.password = '',
-      this.authFormType = AuthFormType.login
-       }
-      );
+      this.authFormType = AuthFormType.login});
 
   void updateEmail(String email) => copyWith(
       email:
@@ -23,17 +20,30 @@ class AuthController with ChangeNotifier {
   void updatePassword(String password) => copyWith(
       password:
           password); //this function main work to update your password from controller
+  void toggleFormType() {
+    final formType = authFormType == AuthFormType.login
+        ? AuthFormType.register
+        : AuthFormType.login;
+    copyWith(authFormType: formType, email: '', password: '');
+  }
+
+  Future<void> submit() async {
+    try {
+      if (authFormType == AuthFormType.login) {
+        await auth.loginWithEmailAndPassword(email: email, password: password);
+      } else
+        await auth.signUpWithEmailAndPassword(email: email, password: password);
+    } catch (e) {}
+  }
 
   void copyWith(
       {AuthBase? auth,
       String? email,
       String? password,
       AuthFormType? authFormType}) {
-
-      this.email=email??this.email;
-      this.password=password??this.password;
-      this.authFormType=authFormType??this.authFormType;
-
+    this.email = email ?? this.email;
+    this.password = password ?? this.password;
+    this.authFormType = authFormType ?? this.authFormType;
 
     notifyListeners();
   }

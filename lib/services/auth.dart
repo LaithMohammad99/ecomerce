@@ -4,6 +4,7 @@ abstract class AuthBase {
   User? get currentUser;
 
   Stream<User?> authStateChange();
+
   // برحع حالت authintaction
   //streaem is return real time data
   Future<User?> loginWithEmailAndPassword(
